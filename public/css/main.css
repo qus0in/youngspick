@@ -1,0 +1,7 @@
+.jumbotron {
+    background: url(https://cdn.pixabay.com/photo/2014/02/04/18/08/cafe-gourmande-258201_1280.jpg) center/cover;
+    background-blend-mode: multiply;
+}
+textarea{
+    width: 100%;
+}

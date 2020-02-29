@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <title>Young's Pick</title>
+</head>
+
+<body>
+    <header class="container">
+        <header class="jumbotron text-light bg-dark">
+            <h1 class="display-4">
+                Young's Pick
+            </h1>
+            <p class="lead">변영인의 맛집 리스트</p>
+        </header>
+    </header>
+    <section class="container">
+        <div class="row d-flex justify-content-center">
+            <div id="addStore" class="col-md-6 col-lg-4 m-3 border rounded">
+                <!-- modal 요소 하나 추가하여 삭제하기 기능 구현
+                    1. addStore 상의 key 받아오는 기능 함수화
+                    2. 해당 리스트 콤보박스화 한 다음, 선택 시에는 제목을 노출하게 하고, 실제로는 removeItem으로 해당 key 삭제할 수 있도록.
+                    + 작성하기도 modal로 변경!
+                -->
+                <div class="d-flex justify-content-end">
+                    <button class="m-3 btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#addStoreForm" aria-expanded="false" aria-controls="addStoreForm">
+                        작성하기
+                    </button>
+                </div>
+                <!-- 넘어가지 않게 하기 위해 return false 추가 -->
+                <form class="collapse" id="addStoreForm" onsubmit="addStore(); return false;">
+                    <div class="form-group m-3">
+                        <label for="inputStoreName">
+                            가게 이름
+                        </label>
+                        <input type="text" class="form-control" id="inputStoreName" placeholder="가게 이름을 입력해주세요 (30자 이하)"
+                            required maxlength="30">
+                    </div>
+                    <div class="form-group m-3">
+                        <label for="inputStoreAddress">
+                            가게 주소
+                        </label>
+                        <input type="text" class="form-control" id="inputStoreAddress" placeholder="가게 주소를 입력해주세요 (30자 이하)"
+                            required maxlength="30">
+                    </div>
+                    <div class="form-group m-3">
+                        <label for="inputStoreReview">
+                            가게 리뷰
+                        </label>
+                        <textarea class="form-control" id="inputStoreReview" rows="5" placeholder="가게 리뷰를 입력해주세요 (200자 이하)" maxlength="200"></textarea>
+                    </div>
+                    <div class="d-flex m-3 justify-content-end">
+                        <button type="reset" class="btn btn-outline-secondary mx-1">초기화</button>
+                        <button type="submit" class="btn btn-outline-primary mx-1">제출</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--
+            <클릭에 반응하는 별점 기능 추가>
+            1. span으로 나눠서 0.5개씩 반응 & 두 번 누르면 0개로 초기화 되는 기능 추가
+            2. rating을 localStorage에 추가
+            3. showStores에도 해당 대응되는 부분 추가
+        -->
+        <!--
+            <카카오 지도 기능 구현>
+            1. 주소 정보를 받아서, 카드에 지도를 추가
+            2. 주소 정보를 입력할 때, 카카오 API 사용하여 구현
+            - Promiss !
+            3. 16 대 9 비율을 유지하게 구현
+            https://hyeonseok.com/soojung/css/2012/08/22/712.html
+            4. store가 우선 6개만 loading 되게 + 더보기 버튼 눌러야 추가적으로 6개 더 로딩 되도록. (closure 활용 해 보기)
+        -->
+        <div class="row d-flex justify-content-start" id="showStores">
+        </div>
+    </section>
+    <!-- Optional JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+
+</html>
