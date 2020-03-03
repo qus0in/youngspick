@@ -1,7 +1,62 @@
+/* 점보트론 배경 이미지 */
 .jumbotron {
     background: url(https://cdn.pixabay.com/photo/2014/02/04/18/08/cafe-gourmande-258201_1280.jpg) center/cover;
     background-blend-mode: multiply;
 }
+/* textarea 전체 채우기 */
 textarea{
     width: 100%;
+}
+/* 별점 설정 */
+.storeStar{
+    /* 자식 요소를 absolut 처리하여 겹치게 할 것이기 때문에 position relative */
+    position: relative;
+    height: 2rem;
+    /* inline 요소 간의 스페이스 제거 */
+    font-size: 0;
+} 
+.storeStar .fa {
+    width: 2rem;
+    height: inherit;
+    /* 가운데 정렬을 위한 line-height와 height 일치 */
+    line-height: 2rem;
+    vertical-align: middle;
+    /* star의 frame 역할을 하는 fa-star-o를 제외하곤 번짐 현상 때문에 약간 크기를 줄여줘야함 */
+    font-size: 1.9rem;
+    /* 가운데 정렬 */
+    text-align: center;
+    color: yellow; 
+}
+.storeStar .fa-star-o {
+    font-size: 2rem;
+    color: grey;
+}
+.storeStar > div {
+    /* input -> frame -> background 순으로 겹쳐서 별점 입력기를 구현한다 (기준은 .storeStar 요소 자체) */
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+/* input 관련 */
+#inputStoreStar {
+    /* 크기 확대 */
+    height: 3rem;
+}
+#inputStoreStar .fa {
+    /* 크기 확대 */
+    width: 3rem;
+    /* 가운데 정렬을 위한 line-height와 height 일치 */
+    line-height: 3rem;
+    /* star의 frame 역할을 하는 fa-star-o를 제외하곤 번짐 현상 때문에 약간 크기를 줄여줘야함 */
+    font-size: 2.9rem;
+}
+#inputStoreStar .fa-star-o {
+    /* 크기 확대 */
+    font-size: 3rem;
+}
+#inputStoreStar input[type=range] {
+    /* range 타입의 input 요소를 위에 덮어씌우되 opacity를 0%로 줘서 클릭과 키보드에 대응하지만 ui가 노출되지 않도록 함 */
+    width: 15rem;
+    height: 3rem;
+    opacity: 0%;
 }

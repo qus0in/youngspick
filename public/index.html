@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- 별점 구현을 위한 font-awesome 사용 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/main.css">
@@ -14,10 +16,12 @@
     <header class="container">
         <div class="d-flex justify-content-end">
             <!-- Button trigger modal -->
-            <button type="button" class="my-2 mx-1 btn btn-outline-dark" data-toggle="modal" data-target="#addStoreModal">
+            <button type="button" class="my-2 mx-1 btn btn-outline-dark" data-toggle="modal"
+                data-target="#addStoreModal">
                 작성하기
             </button>
-            <button type="button" class="my-2 mx-1 btn btn-outline-danger" data-toggle="modal" data-target="#removeStoreModal">
+            <button type="button" class="my-2 mx-1 btn btn-outline-danger" data-toggle="modal"
+                data-target="#removeStoreModal">
                 삭제하기
             </button>
         </div>
@@ -41,8 +45,12 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <!-- 넘어가지 않게 하기 위해 return false 추가 -->
-                        <form id="addStoreForm" onsubmit="StoreData.addStore(); return false;">
+                        <!--
+                            <form>
+                            1. 페이지 넘어가지 않게 하기 위해 onsubmit에 return false 추가 + form을 리셋(this.reset) + drawStar(0)
+                            2. reset 시 별점 초기화를 위해 onreset에 drawStar(0) 추가
+                        -->
+                        <form id="addStoreForm" onsubmit="StoreData.addStore(); this.reset(); StoreView.drawStar(0); return false;" onreset="StoreView.drawStar(0);">
                             <div class="modal-body">
                                 <div class="form-group m-3">
                                     <label for="inputStoreName">
@@ -57,6 +65,34 @@
                                     </label>
                                     <input type="text" class="form-control" id="inputStoreAddress"
                                         placeholder="가게 주소를 입력해주세요 (30자 이하)" required maxlength="30">
+                                </div>
+                                <div class="from-group m-3">
+                                    <label for="inputStoreRate">
+                                        가게 평점
+                                    </label>
+                                    <div id="inputStoreStar" class="storeStar">
+                                        <!-- star background -->
+                                        <div>
+                                            <i class="fa"></i>
+                                            <i class="fa"></i>
+                                            <i class="fa"></i>
+                                            <i class="fa"></i>
+                                            <i class="fa"></i>
+                                        </div>
+                                        <!-- star frame -->
+                                        <div>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                        </div>
+                                        <!-- input elements -->
+                                        <div>
+                                            <!-- inputStoreRate를 클릭하게 되면 감지하여 star를 반응하게 함 -->
+                                            <input type="range" id="inputStoreRate" min="0" max="5" step="0.5" value="0" onchange="StoreView.drawStar(this.value);">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group m-3">
                                     <label for="inputStoreReview">
@@ -74,8 +110,8 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="removeStoreModal" tabindex="-1" role="dialog" aria-labelledby="removeStoreModalLabel"
-                aria-hidden="true">
+            <div class="modal fade" id="removeStoreModal" tabindex="-1" role="dialog"
+                aria-labelledby="removeStoreModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -103,19 +139,16 @@
             </div>
         </div>
         <!--
-            <클릭에 반응하는 별점 기능 추가>
-            1. span으로 나눠서 0.5개씩 반응 & 두 번 누르면 0개로 초기화 되는 기능 추가
-            2. rating을 localStorage에 추가
-            3. showStores에도 해당 대응되는 부분 추가
-        -->
-        <!--
             <카카오 지도 기능 구현>
             1. 주소 정보를 받아서, 카드에 지도를 추가
             2. 주소 정보를 입력할 때, 카카오 API 사용하여 구현
             - Promiss !
             3. 16 대 9 비율을 유지하게 구현
             https://hyeonseok.com/soojung/css/2012/08/22/712.html
-            4. store가 우선 6개만 loading 되게 + 더보기 버튼 눌러야 추가적으로 6개 더 로딩 되도록. (closure 활용 해 보기)
+            < 페이징 >
+            - store가 우선 6개만 loading 되게
+            - 더보기 버튼 눌러야 추가적으로 6개 더 로딩 되도록.
+              (closure 활용 해 보기)
         -->
         <div class="row d-flex justify-content-start" id="showStores">
         </div>
