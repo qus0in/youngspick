@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ce2858ca466fef497f5d5188da7108eb&libraries=services"></script>
+</head>
+
+<body>
+    <div>
+        <form onsubmit="return false;">
+            <input id="searchText" type="text" required>
+            <button onclick="searchStore()">검색</button>
+            <hr>
+            <select id="searchSelect" size="5" style="width: 20rem;">
+                <option>가게명으로 검색</option>
+            </select>
+            <hr>
+            <button id="firstPage" type="button">&lt;&lt;</button>
+            <button id="prevPage" type="button">&lt;</button>
+            <button id="nextPage" type="button">&gt;</button>
+            <button id="lastPage" type="button">&gt;&gt;</button>
+            <button id="checkStore" type="button">확인</button>
+            <button id="decision" type="button">결정</button>
+        </form>
+        <!-- 검색 => 이름, 주소 확정 => 확인하기 버튼 -->
+    </div>
+    <script>
+        // Places 객체
+        const places = new kakao.maps.services.Places();
+
+        // DOM
+        const searchSelect = document.querySelector('#searchSelect');
+        const firstPageBtn = document.querySelector('#firstPage');
+        const lastPageBtn = document.querySelector('#lastPage');
+        const prevPageBtn = document.querySelector('#prevPage');
+        const nextPageBtn = document.querySelector('#nextPage');
+
+        // setDisplay
+        const setDisplay = (...args) => {
+            for (let v of args) {
+                v[1] ? v[0].style.display = 'inline' : v[0].style.display = 'none'
+            }
+        }
+        // setOnclick
+        const setOnclick = (...args) => {
+            for (let v of args) {
+                v[0].onclick = () => searchStore(v[1]);
+            }
+        }
+        // searchStore
+        const searchStore = (curr) => {
+            const searchText = document.querySelector('#searchText').value;
+            // 검색 키워드 
+            // console.log(searchText);
+            // 프로미스로 구현
+            // promise를 사용해봅시다
+            // https://ko.javascript.info/promise-basics
+            // https://devtalk.kakao.com/t/geocoder-coord2address/83940/2
+            const promise = new Promise((resolve, reject) => {
+                // callback 함수를 promise로 랩핑
+                places.keywordSearch(searchText, (result, status, pagination) => {
+                    status === kakao.maps.services.Status.OK
+                        ? resolve([result, pagination]) : reject(status)},
+                // option : FD6은 식당, 한 페이지의 5항목씩, page는 이후에 검색을 위해
+                { category_group_code: 'FD6', size: 5, page: curr ? curr : 1 });
+            });
+            const drawOpt = (result) => {
+                searchSelect.innerHTML = "";
+                for (let v of result[0]) {
+                    const opt = document.createElement('option');
+                    const url = document.createElement('span');
+                    opt.title = v.category_name;
+                    opt.value = v.road_address_name;
+                    opt.innerHTML = `${v.place_name} (${v.road_address_name ? v.road_address_name : v.address_name})`;
+                    url.style.display = 'hidden';
+                    url.innerHTML = v.place_url;
+                    searchSelect.appendChild(opt);
+                    searchSelect.appendChild(url);
+                };
+                return result[1];
+            }
+            const drawBtn = (pagination) => {
+                setDisplay(
+                    // 연관 버튼, 조건식 => 조건을 만족하면 inline, 아니면 none
+                    [firstPageBtn, pagination.current >= 3],
+                    [lastPageBtn, pagination.last - pagination.current >= 2],
+                    [prevPageBtn, pagination.hasPrevPage],
+                    [nextPageBtn, pagination.hasNextPage]
+                );
+                setOnclick(
+                    // 연관 버튼, 목표하는 페이지 => 해당 버튼으로 이동
+                    [firstPageBtn, pagination.first],
+                    [lastPageBtn, pagination.last],
+                    [prevPageBtn, pagination.current - 1],
+                    [nextPageBtn, pagination.current + 1]
+                );
+            }
+            promise
+                .then(drawOpt)
+                .then(drawBtn)
+                .catch(console.error);
+        }
+    </script>
+</body>
+
+</html>

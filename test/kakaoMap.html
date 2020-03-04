@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ce2858ca466fef497f5d5188da7108eb&libraries=services"></script>
+</head>
+<body>
+    <!-- <div id="map" style="width:500px;height:400px;"></div> -->
+    <div>
+        <input id="searchText" type="text">
+        <button onclick="search()">검색</button>
+        <br>
+        <select id="searchSelect" size="5">
+            <option>가게명으로 검색</option>
+        </select>
+        <!-- 검색 => 이름, 주소 확정 => 확인하기 버튼 -->
+        <button id="nextBtn">다음장</button>
+    </div>
+	<script>
+		// const container = document.getElementById('map');
+		// const options = {
+		// 	center: new kakao.maps.LatLng(33.450701, 126.570667),
+		// 	level: 3
+		// };
+
+        // const map = new kakao.maps.Map(container, options);
+        
+
+        // 콜백으로 구현
+        function search() {
+            const searchText = document.getElementById('searchText').value;
+            console.log(searchText);
+            const places = new kakao.maps.services.Places();
+            const searchSelect = document.getElementById('searchSelect');
+            searchSelect.innerHTML = "<option>가게명으로 검색</option>";
+            const callback = function(result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    console.log(result);
+                    for(const v of result) {
+                        console.log(v);
+                        const opt = document.createElement('option');
+                        opt.title = v.category_name;
+                        opt.innerHTML = `${v.place_name} (${v.road_address_name})`
+                        searchSelect.appendChild(opt)
+                    }
+                }                
+            };
+            console.log(places.keywordSearch(searchText, callback, {category_group_code : 'FD6'}));
+            places.keywordSearch(searchText, callback, {category_group_code : 'FD6'});
+        }
+	</script>
+</body>
+</html>

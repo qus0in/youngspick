@@ -25,7 +25,7 @@ textarea{
     font-size: 1.9rem;
     /* 가운데 정렬 */
     text-align: center;
-    color: yellow; 
+    color: gold; 
 }
 .storeStar .fa-star-o {
     font-size: 2rem;
@@ -55,8 +55,22 @@ textarea{
     font-size: 3rem;
 }
 #inputStoreStar input[type=range] {
-    /* range 타입의 input 요소를 위에 덮어씌우되 opacity를 0%로 줘서 클릭과 키보드에 대응하지만 ui가 노출되지 않도록 함 */
+    /* range 타입의 input 요소를 위에 덮어씌우되 opacity를 0으로 줘서 클릭과 키보드에 대응하지만 ui가 노출되지 않도록 함 */
     width: 15rem;
     height: 3rem;
     opacity: 0%;
+}
+#inputStoreStar input[type=range]::-webkit-slider-thumb {
+    visibility: hidden;
+}
+/* toast 관련 */
+.toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+.toast.show {
+    z-index: 999;
 }
