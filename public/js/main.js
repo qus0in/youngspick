@@ -48,6 +48,7 @@ const storeView = {
     getAllKeys: function (asc) {
         const keys = [];
         for (let i = 0; i < localStorage.length; i++) keys.push(localStorage.key(i));
+        // console.log(keys);
         return asc ? keys.sort() : keys.sort().reverse();
     },
     // 삭제하기 안 option 구현
@@ -122,7 +123,7 @@ const storeView = {
         // 각기 store에 추가해줄 classList array 생성
         const cList = ['col-md-6', 'col-lg-4', 'd-flex', 'rounded']
         // drawStore
-        const drawStore = (key) => {
+        const drawStore = async (key) => {
             // cList를 클래스로 가지는 div 생성 
             const storeEl = this.buildEl('div', cList);
             // store 객체 생성 <- storeVal을 바탕으로
@@ -134,7 +135,7 @@ const storeView = {
                 rate: storeVal[3],
                 image: storeVal[4],
                 timeStamp: storeVal[5]
-            }
+            };
             // store 객체 바탕으로 card 생성
             const storeCard = this.buildEl('div', ['card', 'w-100', 'm-3', 'overflow-auto']);
             // card-header
@@ -186,8 +187,14 @@ const storeView = {
                 });
                 // 마커가 지도 위에 표시되도록 설정합니다
                 marker.setMap(map);
-            }
-            const makeExpandBtn = (result) => {
+            };
+            // 비동기 문제를 해결하는 방법 (async, await)
+            // https://joshua1988.github.io/web-development/javascript/js-async-await/
+            async function makeExpandBtn() {
+                // promise로 리턴된 객체를 await를 통해 순차적으로 받을 수 있다 (axios에도 잘 활용해볼 것!)
+                // 학습 순서 : ajax 통신 & callback => promise => async/await
+                const result = await storeInfo.loadStore(storeObj.address, storeObj.name);
+                // console.log(result);
                 storeCard.onclick = function () {
                     // 가게 이름
                     common.getEl('expandStoreName').innerHTML = storeObj.name;
@@ -204,7 +211,7 @@ const storeView = {
                     // 가게 리뷰 작성일
                     common.getEl('expandStoreTimeStamp').innerHTML = `작성일 : ${storeObj.timeStamp.substring(0, 19).replace('_', ' ')}`;
                     // 가게 지도
-                    drawMap(result.y, result.x);
+                    drawMap(result.y, result.x); // x가 경도(lng), y가 위도(lat)라서 뒤집어 넣어줌
                     // 큰 지도 버튼
                     common.getEl('watchLarge').onclick = () => window.open(`https://map.kakao.com/link/map/${result.id}`);
                     // 상세 페이지 버튼
@@ -212,17 +219,12 @@ const storeView = {
                     // 길찾기 버튼
                     common.getEl('findWay').onclick = () => window.open(`https://map.kakao.com/link/to/${result.id}`);
                 }
-                // card를 col에, col을 row에
-                storeEl.appendChild(storeCard);
-                storeAll.appendChild(storeEl);
             }
-            storeInfo.loadStore(storeObj.address, storeObj.name)
-                .then(makeExpandBtn)
-                .catch(console.err);
+            makeExpandBtn();
+            storeEl.appendChild(storeCard);
+            storeAll.appendChild(storeEl);
         }
-        for (let v of this.getAllKeys()) {
-            drawStore(v);
-        }
+        for (let v of this.getAllKeys()) drawStore(v);
     },
     // 일괄적으로 갱신 시 그려주는 메소드
     draw: function () {
@@ -272,7 +274,7 @@ const storeData = {
         storeView.draw(); // 다시 그려 줌
     }
 }
-
+// Store 정보 검색 관련 객체
 const storeInfo = {
     // 키워드 검색을 할 수 있는 프로미스를 생성해주는 메소드
     kwdSearch: function (searchText, curr) {
@@ -285,7 +287,7 @@ const storeInfo = {
             // callback 함수를 promise로 랩핑
             places.keywordSearch(searchText, (result, status, pagination) => {
                 status === kakao.maps.services.Status.OK
-                    ? resolve([result, pagination]) : reject(status)
+                    ? resolve([result, pagination]) : reject(status);
             },
                 // option : FD6은 식당, 한 페이지의 5항목씩, page는 이후에 검색을 위해
                 { category_group_code: 'FD6', size: 5, page: curr ? curr : 1 });
@@ -316,14 +318,42 @@ const storeInfo = {
             }
         }
         // select 안에 들어갈 option을 넣어주는 함수
+        // [프로미스 버전]
+        // const drawOpt = (result) => {
+        //     // 우선 결정 버튼은 막아둡니다
+        //     decisionBtn.disabled = true;
+        //     // 검색된 가게 목록을 받아줄 select 태그 내부를 비워주고
+        //     storeList.innerHTML = "";
+        //     // for문으로 5번 돌려줘서 option을 구성, option의 value는 이후 클로저를 통해 구현한 결정 button 안에 전달될 index
+        //     for (let i = 0; i < result[0].length; i++) {
+        //         const v = result[0][i];
+        //         const opt = document.createElement('option');
+        //         opt.title = v.category_name;
+        //         opt.value = i;
+        //         opt.innerHTML = `${v.place_name} (${v.road_address_name ? v.road_address_name : v.address_name})`;
+        //         storeList.appendChild(opt);
+        //     };
+        //     // 클로저 활용하여 결정 버튼 안에 함수 삽입
+        //     // storeList(<select>)의 값을 받아 index로 사용
+        //     // 장소명, 주소(도로명 주소 or 지번 주소)를 input에 전달 
+        //     decisionBtn.onclick = function () {
+        //         const data = result[0][storeList.value];
+        //         // console.log(data);
+        //         storeName.value = data.place_name;
+        //         storeAddress.value = data.road_address_name
+        //             ? data.road_address_name : data.address_name;
+        //     }
+        //     return result[1];
+        // }
+        // [async/await 버전]
         const drawOpt = (result) => {
             // 우선 결정 버튼은 막아둡니다
             decisionBtn.disabled = true;
             // 검색된 가게 목록을 받아줄 select 태그 내부를 비워주고
             storeList.innerHTML = "";
             // for문으로 5번 돌려줘서 option을 구성, option의 value는 이후 클로저를 통해 구현한 결정 button 안에 전달될 index
-            for (let i = 0; i < result[0].length; i++) {
-                const v = result[0][i];
+            for (let i = 0; i < result.length; i++) {
+                const v = result[i];
                 const opt = document.createElement('option');
                 opt.title = v.category_name;
                 opt.value = i;
@@ -334,13 +364,12 @@ const storeInfo = {
             // storeList(<select>)의 값을 받아 index로 사용
             // 장소명, 주소(도로명 주소 or 지번 주소)를 input에 전달 
             decisionBtn.onclick = function () {
-                const data = result[0][storeList.value];
+                const data = result[storeList.value];
                 // console.log(data);
                 storeName.value = data.place_name;
                 storeAddress.value = data.road_address_name
                     ? data.road_address_name : data.address_name;
             }
-            return result[1];
         }
         const drawBtn = (pagination) => {
             setDisabled(
@@ -359,16 +388,26 @@ const storeInfo = {
             );
             decisionBtn.disabled = false;
         }
+        const searchKwd = document.querySelector('#inputStoreKwd').value;
+        
         // promise의 작동 순서
         // 이미 설정한 kwdSearch(검색하려는 키워드 input) 메소드로 promise return
         // place 객체를 통해 키워드 검색 정보 요청
         // 콜백 1 : 키워드 검색 결과와 페이징 정보를 받아오고, 키워드 검색 결과를 바탕으로 <select> 내부 및 결정 버튼 구성 
         // 콜백 2 : 페이징
-        const searchKwd = document.querySelector('#inputStoreKwd').value;
-        this.kwdSearch(searchKwd, curr)
-            .then(drawOpt)
-            .then(drawBtn)
-            .catch(console.error);
+        // 프로미스로 구현했을 경우
+        // this.kwdSearch(searchKwd, curr)
+        //     .then(drawOpt)
+        //     .then(drawBtn)
+        //     .catch(console.error);
+
+        // async, await로 구현했을 경우
+        async function drawForm(){
+            const resultItems = await storeInfo.kwdSearch(searchKwd, curr);
+            drawOpt(resultItems[0]);
+            drawBtn(resultItems[1]);
+        }
+        drawForm();
     },
     // 주소와 가게 이름을 통해 가게 관련 정보 불러오기 (프로미스)
     loadStore: function (address, name, page) {
