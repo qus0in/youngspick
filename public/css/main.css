@@ -74,3 +74,7 @@ textarea{
 .toast.show {
     z-index: 999;
 }
+/* 지도 설정 */
+#expandStoreMap {
+    height: 360px;
+}
