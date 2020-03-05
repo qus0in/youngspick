@@ -24,6 +24,10 @@
                 data-target="#removeStoreModal">
                 삭제하기
             </button>
+            <!-- <button type="button" class="my-2 mx-1 btn btn-outline-primary" data-toggle="modal"
+                data-target="#expandStoreModal">
+                상세보기
+            </button> -->
         </div>
         <header class="jumbotron text-light bg-dark">
             <h1 class="display-4">
@@ -34,6 +38,7 @@
     </header>
     <section>
         <!-- Modal -->
+        <!-- 가게 추가 모달 -->
         <div class="modal fade" id="addStoreModal" tabindex="-1" role="dialog" aria-labelledby="addStoreModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -47,7 +52,7 @@
 
                     <div class="modal-body">
                         <div class="form-group m-3">
-                            <form id="searchStoreForm" onsubmit="searchStore(); return false;">
+                            <form id="searchStoreForm" onsubmit="StoreInfo.searchStore(); return false;">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <label class="input-group-text text-dark" for="inputStoreKwd">
@@ -165,6 +170,7 @@
                 </div>
             </div>
         </div>
+        <!-- 가게 삭제 모달 -->
         <div class="modal fade" id="removeStoreModal" tabindex="-1" role="dialog"
             aria-labelledby="removeStoreModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -192,6 +198,56 @@
                 </div>
             </div>
         </div>
+        <!-- 가게 상세 모달 -->
+        <div class="modal fade" id="expandStoreModal" tabindex="-1" role="dialog"
+            aria-labelledby="expandStoreModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div>
+                            <h5 class="modal-title" id="expandStoreModalLabel">가게 상세 정보</h5>
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body container-fluid">
+                        <div class="display-4 modal-title h3 font-weight-bold" id="expandStoreName">가게 이름</div>
+                        <div id="expandStoreAdress" class="lead">가게 주소
+                        </div>
+                        <small id="expandStoreCategory" class="font-italic">카테고리</small>
+                        <div class="row">
+                            <div class="col-lg-6 p-3 d-flex flex-column">
+                                <div class="h4">이미지</div>
+                                <div class="d-flex align-items-center flex-fill">
+                                    <img  id="expandStoreImg" class="img-fluid border rounded" src="img/meal.png">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 p-3">
+                                <div class="h4">지도</div>
+                                <div style="width: 360px; height: 360px" id="expandStoreMap" class="mx-auto border rounded">API</div>
+                            </div>
+                            <div class="col-2 h4 p-3">별점</div>
+                            <div class="col m-3 storeStar" id="expandStoreStar">별별별별별</div>
+                            <div class="w-100"></div>
+                            <div class="col p-3">
+                                <div class="h4">리뷰</div>
+                                <div id="expandStoreReview" class="p-3"></div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col d-flex justify-content-start">
+                                <button id="watchLarge" class="mr-1 btn btn-outline-primary">큰 지도 보기</button>
+                                <button id="watchDetail" class="mr-1 btn btn-outline-primary">상세 페이지 보기</button>
+                                <button id="findWay" class="btn btn-outline-primary">길찾기</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="expandStoreTimeStamp" class="modal-footer text-right small font-italic">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
     <section class="container">
         <!-- 가게 정보가 추가 되는 부분 -->
@@ -202,12 +258,11 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <!-- 데이터 & 요소 그려주는 것 -->
-    <script src="./js/store.js"></script>
-    <!-- 지도 관련 -->
+    <!-- 카카오 지도 API -->
     <script type="text/javascript"
-        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ce2858ca466fef497f5d5188da7108eb&libraries=services"></script>
-    <script src="./js/place.js"></script>
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ce2858ca466fef497f5d5188da7108eb&libraries=services"></script>
+    <!-- 데이터 & 요소 그려주는 것 -->
+    <script src="./js/main.js"></script>
 </body>
 
 </html>
