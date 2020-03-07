@@ -60,9 +60,6 @@ textarea{
     height: 3rem;
     opacity: 0%;
 }
-#inputStoreStar input[type=range]::-webkit-slider-thumb {
-    visibility: hidden;
-}
 /* toast 관련 */
 .toast {
     position: fixed;
