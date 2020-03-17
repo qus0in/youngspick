@@ -12,6 +12,8 @@
   "dependencies": {
     "ejs": "^2.7.4",
     "express": "^4.17.1",
-    "mongoose": "^5.9.5"
+    "mongoose": "^5.9.5",
+    "mongoose-auto-increment": "^5.0.1",
+    "mongoose-paginate": "^5.0.3"
   }
 }
