@@ -38,7 +38,7 @@ router.get('/', async function (req, res, next) {
 // 페이지별 조회
 router.get('/:page', async function (req, res, next) {
     try {
-        // limit : 최대 장수, page : 
+        // limit : page별 item수, page : 조회할 page 
         const postPage = await Post.paginate({}, { limit: 5, page: Number(req.params.page) });
         console.log(postPage);
         res.json(postPage.docs);
