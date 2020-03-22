@@ -1,0 +1,22 @@
+<header class="container">
+    <header class="jumbotron text-light bg-dark">
+        <h1 class="display-4">
+            Young's Pick
+        </h1>
+        <p class="lead">변영인의 맛집 리스트</p>
+    </header>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <% if (page=="main") {%>
+            <li class="breadcrumb-item active"  aria-current="page">전체보기</li>
+            <% } else { %>
+            <li class="breadcrumb-item"><a href="/">전체보기</a></li>
+            <% } %>
+            <% if (page=="write") {%>
+            <li class="breadcrumb-item active"  aria-current="page">작성하기</li>
+            <% } else { %>
+            <li class="breadcrumb-item"><a href="/write">작성하기</a></li>
+            <% } %>
+        </ol>
+    </nav>
+</header>

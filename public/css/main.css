@@ -1,7 +1,8 @@
 /* 점보트론 배경 이미지 */
 .jumbotron {
-    background: url(https://cdn.pixabay.com/photo/2014/02/04/18/08/cafe-gourmande-258201_1280.jpg) center/cover;
+    background: url(../img/top.jpg) center right / contain no-repeat;
     background-blend-mode: multiply;
+    margin-bottom: 0.5rem;
 }
 /* textarea 전체 채우기 */
 textarea{
