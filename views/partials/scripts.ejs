@@ -7,5 +7,11 @@
 <!-- 카카오 지도 API -->
 <script type="text/javascript"
     src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ce2858ca466fef497f5d5188da7108eb&libraries=services"></script>
-<!-- index page -->
-<script src="./js/index_page.js"></script>
+<!-- Custom -->
+<script src="/js/common_page.js"></script>
+<% if (page=="main") {%>
+    <script src="/js/index_page.js"></script>
+<% } %>
+<% if (page=="detail") {%>
+    <script src="/js/detail_page.js"></script>
+<% } %>

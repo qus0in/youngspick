@@ -13,8 +13,13 @@ router.use(function (req, res, next) {
     next();
 });
 
-// 게시글 작성
-router.post('/', async function (req, res, next) {
+// 동기 (sync)
+
+// 기본 접속
+router.get('/', (req, res) => res.render('pages/index', { page: "main", title: "Young's Pick"}))
+
+// 리뷰 작성
+router.post('/write', async function (req, res, next) {
     try {
         const review = await Review.create(req.body);
         console.log(review);
@@ -24,23 +29,28 @@ router.post('/', async function (req, res, next) {
     }
 });
 
-// 전체 조회
-router.get('/', async function (req, res, next) {
+// 리뷰 삭제
+router.post('/delete', async (req, res, next) => {
     try {
-        const reviewList = await Review.find({});
-        console.log(reviewList);
-        res.json(reviewList);
+        // console.log(req.headers.referer)
+        const id = String(req.headers.referer).match(/review\/(\d+)/)[1]
+        // console.log(id)
+        const review = await Review.findByIdAndDelete(id);
+        const msg = `삭제 성공 : ${JSON.stringify(review)}`
+        console.log(msg);
+        res.redirect('/');
     } catch (err) {
         next(err)
     }
-});
+})
 
+// 비동기 (async)
 // 페이지별 조회
-router.get('/:page', async function (req, res, next) {
+router.get('/page/:page', async function (req, res, next) {
     try {
         // limit : page별 item수, page : 조회할 page 
         const reviewPage = await Review.paginate({}, { limit: 6, page: Number(req.params.page) });
-        console.log(reviewPage);
+        console.log(`page ${reviewPage.page} / ${reviewPage.pages}`);
         res.json(reviewPage);
     } catch (err) {
         next(err)
@@ -48,12 +58,12 @@ router.get('/:page', async function (req, res, next) {
 });
 
 // 게시글 개별 조회
-router.get('/id/:id', async function (req, res, next) {
+router.get('/review/:id', async function (req, res, next) {
     // findById : id로 검색할 수 있게 해주는 메소드
     try {
         const review = await Review.findById(req.params.id);
         console.log(review);
-        res.json(review);
+        res.render('pages/detail', { page: "detail", title: `Young's Pick - ${review.name}`, review: review})
     } catch (err) {
         next(err)
     }
@@ -65,19 +75,6 @@ router.put('/id/:id', async function (req, res, next) {
     try {
         const review = await Review.findByIdAndUpdate(req.params.id, req.body, { new: true });
         const msg = `수정 성공 : ${JSON.stringify(review)}`
-        console.log(msg);
-        res.json(msg);
-    } catch (err) {
-        next(err)
-    }
-});
-
-// 게시글 삭제
-router.delete('/id/:id', async function (req, res, next) {
-    // findByIdAndDelete : id로 검색 후 삭제
-    try {
-        const review = await Review.findByIdAndDelete(req.params.id);
-        const msg = `삭제 성공 : ${JSON.stringify(review)}`
         console.log(msg);
         res.json(msg);
     } catch (err) {

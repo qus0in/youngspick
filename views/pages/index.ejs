@@ -1,18 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <%# include %>
     <%# views 속에 partials/header 에서 불러오고, 거기에 title이라는 변수를 재전달 (라우터에서 전달 받았음) %>
-    <%- include('../partials/header', {title: title}); %>
+    <%- include('../partials/header'); %>
 </head>
 
 <body>
     <%- include('../partials/nav'); %>
     <section class="container">
-        <div class="row d-flex justify-content-start" id="reviewList">
-            
-        </div>
+        <div class="row d-flex justify-content-start" id="reviewList"></div>
     </section>
     <%- include('../partials/scripts'); %>
 </body>
