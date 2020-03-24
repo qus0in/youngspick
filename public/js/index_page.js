@@ -1,7 +1,7 @@
 // axios를 통해 router에 pagination된 묶음 요청
 const getReviewPromise = async (page = 1) => {
     try {
-        const response = await axios.get(`/reviews/${page}`);
+        const response = await axios.get(`/page/${page}`);
         // console.log(response);
         // response는 promise의 형태로 반환됨, 만약에 이걸 다시 쓰고 싶다며 then을 쓰거나 다른 async 안에 넣어서 await 방식으로 값을 꺼내 써야함
         return response.data;
@@ -9,66 +9,11 @@ const getReviewPromise = async (page = 1) => {
 }
 // const reviews = getReviewList()
 
-// 요소를 생성해주는 함수 (차후 common으로 옮기기)
-const makeElement = (tagName, classList=[], inner="") => {
-    const element = document.createElement(tagName);
-    // console.log(classList);
-    for (const v of classList) {
-        element.classList.add(v)        
-    }
-    element.innerHTML = inner;
-    return element
-} 
-
-// 별을 그려주는 함수 (차후 common으로 옮기기)
-const drawStar = (rate, el) => {
-    // console.log(el);
-    if (el) {
-        // 첫번째 div (실제 움직이는 별)
-        const div1 = makeElement('div');
-        for (let i = 0; i < 5; i++) {
-            div1.appendChild(makeElement('i', ['fa']))
-        }
-        // 두번째 div (프레임 역할을 하는 별)
-        const div2 = makeElement('div');
-        for (let i = 0; i < 5; i++) {
-            div2.appendChild(makeElement('i', ['fa', 'fa-star-o']))
-        }
-        el.appendChild(div1);
-        el.appendChild(div2);
-    } else {
-        el = dom.querySelector('#inputStoreStar');
-    }
-    // console.log(el);
-    // 지정한 클래스 안에 있는 첫번째 div(background) 요소 속 아이콘들을 지정
-    const stars = el
-        .getElementsByTagName('div')[0]
-        .getElementsByTagName('i');
-    // 일괄적으로 꽉찬 별, 반쪽 별 모두 class를 지워준다
-    for (const v of stars) {
-        v.classList.remove("fa-star");
-        v.classList.remove("fa-star-half-full");
-    }
-    let i = 0;
-    while (rate > 0) {
-        // console.log(`i, ${i}, rate, ${rate}`);
-        if (rate >= 1) {
-            rate--;
-            stars[i].classList.add("fa-star");
-        } else {
-            if (rate == 0.5) {
-                stars[i].classList.add("fa-star-half-full");
-            }
-            break;
-        }
-        i++;
-    }
-}
-
 // 받아온 묶음을 그려주는 함수
 const drawReviewList = async reviewPromise => {
     // #reviewList 조회 및 초기화
     const reviewList = document.querySelector('#reviewList');
+    reviewList.classList.remove("fade-in");
     reviewList.innerHTML = "";
     // 개별 리뷰 요소 작성
     const drawStore = (review) => {
@@ -85,7 +30,7 @@ const drawReviewList = async reviewPromise => {
         const imgur = 'https://imgur.com/';
         reviewImage.style.height = "12rem";
         if (src == '' || src == 'test') {
-            reviewImage.style.backgroundImage = 'url(img/meal.png)';
+            reviewImage.style.backgroundImage = 'url(/img/meal.png)';
             reviewImage.style.backgroundSize = 'contain';
         } else {
             // 차후 수정 예정 (api를 붙여서)
@@ -105,12 +50,11 @@ const drawReviewList = async reviewPromise => {
         reviewCardBody.appendChild(makeElement('div', ['small', 'card-text', 'text-truncate'], review.comments.replace(/<br>/g, ' ')));
         reviewCard.appendChild(reviewCardBody);
         // card-footer
-        reviewCard.appendChild(makeElement('footer', ['card-footer', 'text-right', 'font-italic'], review.createdAt.substring(0, 10)));
+        reviewCard.appendChild(makeElement('footer', ['card-footer', 'text-right', 'font-italic'], new Date(review.createdAt).toLocaleString()));
         // card마다 상세보기 페이지와 연결
         reviewCard.style.cursor = "pointer";
         reviewCard.onclick = function() {
-            // 상세보기 템플릿 구현 후 수정
-            location.href = `/reviews/id/${review._id}`
+            location.href = `/review/${review._id}`
         }
         reviewElement.appendChild(reviewCard);
         reviewList.appendChild(reviewElement);
@@ -149,6 +93,7 @@ const drawReviewList = async reviewPromise => {
         reviewList.append(nav);
     }
     pagination(reviewData.page, reviewData.pages);
+    reviewList.classList.add("fade-in");
 }
 
 drawReviewList(getReviewPromise());

@@ -30,9 +30,5 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs');
 
 // [라우터]
-// app.get('/', (req, res) => res.send('Hello World!'));
-// 템플릿 엔진에서 index.ejs 렌더링
-app.get('/', (req, res) => res.render('pages/index', { page: "main", title: "Young's Pick"}))
-// review 관련 라우터 미들웨어
-app.use('/reviews', require('./routes/reviews'))
+app.use('/', require('./routes/reviews'))
 app.listen(port, () => console.log(`listening on port ${port}!`))

@@ -76,3 +76,11 @@ textarea{
 #expandStoreMap {
     height: 360px;
 }
+/* Fade-in */
+#reviewList {
+    opacity: 0;
+}
+#reviewList.fade-in{
+    opacity: 1;
+    transition: opacity ease-in-out 0.5s;
+}
