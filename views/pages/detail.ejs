@@ -7,14 +7,14 @@
 
 <body>
     <%- include('../partials/nav'); %>
-    <section class="container">
-        <div class="container-fluid border rounded">
-            <header>
+    <section class="container no-gutters mx-auto">
+        <div class="card col-md-10 col-lg-8 col-xl-6 mx-auto mb-3">
+            <header class="card-header">
                 <h1 class="display-4 font-weight-bold" id="storeName"><%= review.name %></h1>
                 <p class="lead"><%= review.address %></p>
                 <%# 카카오 API를 통해 비동기 작업 %>
                 <small id="storeCategory" class="font-italic">카테고리</small>
-                <div class="text-right">
+                <div class="text-right text-muted">
                     <small>
                         작성시간 : <span id="storeCreated"
                             class="font-italic"><%= review.createdAt.toLocaleString() %></span>
@@ -29,12 +29,11 @@
                     </p>
                 </div>
             </header>
-            <section class="my-3">
-                <h4>사진</h4>
+            <section class="card-body">
                 <figure class="d-flex justify-content-center p-3">
                     <img id="storeImage" class="img-fluid border rounded" src=<%# 차후에 test 옵션은 삭제 %>
                         <% if (review.address == 'test' || review.address == '') { %> <%= "/img/meal.png" %>
-                        <% } else { %> <%= "review.image" %> <% } %> class="img-fluid" alt="리뷰 이미지">
+                        <% } else { %> <%= review.image %> <% } %> class="img-fluid" alt="리뷰 이미지">
                 </figure>
                 <%# 카카오 API를 통해 비동기 작업 %>
                 <h4>지도</h4>
@@ -46,11 +45,11 @@
                     <div class="storeStar" id="storeStar">☆☆☆☆☆</div>
                 </figure>
                 <h4>리뷰</h4>
-                <article class="p-3">
-                    <p><%= review.comments %></p>
+                <article class="card-text p-3">
+                    <%= review.comments %>
                 </article>
             </section>
-            <div class="d-flex justify-content-center my-3">
+            <div class="d-flex justify-content-center p-3">
                 <button id="watchLarge" class="mr-2 btn btn-outline-primary">큰 지도 보기</button>
                 <button id="watchDetail" class="mr-2 btn btn-outline-primary">상세 페이지 보기</button>
                 <button id="findWay" class="mr-2 btn btn-outline-primary">길찾기</button>
@@ -59,7 +58,7 @@
         </div>
     </section>
     <div id="deleteModal" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">

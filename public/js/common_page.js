@@ -26,7 +26,7 @@ const drawStar = (rate, el) => {
         el.appendChild(div1);
         el.appendChild(div2);
     } else {
-        el = dom.querySelector('#inputStoreStar');
+        el = document.querySelector('#inputStoreStar');
     }
     // console.log(el);
     // 지정한 클래스 안에 있는 첫번째 div(background) 요소 속 아이콘들을 지정

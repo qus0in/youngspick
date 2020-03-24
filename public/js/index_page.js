@@ -13,6 +13,7 @@ const getReviewPromise = async (page = 1) => {
 const drawReviewList = async reviewPromise => {
     // #reviewList 조회 및 초기화
     const reviewList = document.querySelector('#reviewList');
+    reviewList.classList.remove("fade-in");
     reviewList.innerHTML = "";
     // 개별 리뷰 요소 작성
     const drawStore = (review) => {
@@ -92,6 +93,7 @@ const drawReviewList = async reviewPromise => {
         reviewList.append(nav);
     }
     pagination(reviewData.page, reviewData.pages);
+    reviewList.classList.add("fade-in");
 }
 
 drawReviewList(getReviewPromise());

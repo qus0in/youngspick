@@ -11,7 +11,8 @@
 <script src="/js/common_page.js"></script>
 <% if (page=="main") {%>
     <script src="/js/index_page.js"></script>
-<% } %>
-<% if (page=="detail") {%>
+<% } else if (page=="detail") {%>
     <script src="/js/detail_page.js"></script>
+<% } else if (page=="write") {%>
+    <script src="/js/write_page.js"></script>
 <% } %>
