@@ -9,7 +9,7 @@ const reviewSchema = new mongoose.Schema({
     address: { type: String, required: true },
     comments: { type: String, required: true, minlength: 20, maxlength: 200 },
     rate: { type: Number, min: 0, max: 5, required: true },
-    image: { type: String, required: true }
+    image: { type: String }
 }, { timestamps: true });
 reviewSchema.plugin(autoIncrement.plugin, { model: 'Review', startAt: 1 });
 reviewSchema.plugin(pagination);

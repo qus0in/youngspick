@@ -13,9 +13,6 @@ imgur.setClientId(process.env.IMGUR_CLIENTID);
 // method와 body 정보 확인
 router.use(function (req, res, next) {
     console.log(`method : ${req.method} / url: ${req.url}`);
-    if (req.method == 'POST' || req.method == 'UPDATE') {
-        console.log(`body : ${JSON.stringify(req.body)}`);
-    };
     next();
 });
 
@@ -36,7 +33,10 @@ router.post('/write', upload.single('image'), async function (req, res, next) {
         console.log(reviewRaw);
         // raw로 받아온 다음에 imgur API를 통해서 업로드하고 주소를 바꿔넣어줌
         // mutter를 통해 생성한 upload 함수로 req.file을 만들고, req.file의 buffer를 base64로 인코딩 후 해당 파일로 imgur api로 전달 => response로 json을 받아오는데 그중 data.link에서 업로드된 주소를 받아옴
-        reviewRaw.image = await imgur.uploadBase64(req.file.buffer.toString('base64')).then((json) => json.data.link);
+        if (reviewRaw.image) {
+            // image 값이 있을 때만...
+            reviewRaw.image = await imgur.uploadBase64(req.file.buffer.toString('base64')).then((json) => json.data.link);
+        } 
         const review = await Review.create(reviewRaw);
         console.log(review);
         res.redirect(`/review/${review._id}`);
@@ -52,21 +52,36 @@ router.post('/delete', async (req, res, next) => {
         const id = String(req.headers.referer).match(/review\/(\d+)/)[1]
         // console.log(id)
         const review = await Review.findByIdAndDelete(id);
-        imgur.deleteImage
-        const msg = `삭제 성공 : ${JSON.stringify(review)}`
-        console.log(msg);
+        console.log(`삭제 성공 : ${JSON.stringify(review)}`);
         res.redirect('/');
     } catch (err) {
         next(err)
     }
 })
+// 리뷰 수정 (DB 연동)
+router.post('/edit', upload.single('image'), async function (req, res, next) {
+    try {
+        const reviewRaw = req.body;
+        console.log(reviewRaw);
+        if (reviewRaw.image) {
+            // image 값이 있을 때만...
+            reviewRaw.image = await imgur.uploadBase64(req.file.buffer.toString('base64')).then((json) => json.data.link);
+        } 
+        const id = String(req.headers.referer).match(/review\/(\d+)/)[1]
+        const review = await Review.findByIdAndUpdate(id, reviewRaw);
+        console.log(`수정 성공 : ${JSON.stringify(review)}`);
+        res.redirect(`/review/${review._id}`);
+    } catch (err) {
+        next(err)
+    }
+});
 
 // 비동기 (async)
 // 페이지별 조회
 router.get('/page/:page', async function (req, res, next) {
     try {
-        // limit : page별 item수, page : 조회할 page 
-        const reviewPage = await Review.paginate({}, { limit: 6, page: Number(req.params.page) });
+        // limit : page별 item수, page : 조회할 page , sort : {field : -1} (내림차순)
+        const reviewPage = await Review.paginate({}, { limit: 6, page: Number(req.params.page), sort: {_id : -1} });
         console.log(`page ${reviewPage.page} / ${reviewPage.pages}`);
         res.json(reviewPage);
     } catch (err) {
