@@ -28,7 +28,7 @@ const drawReviewList = async reviewPromise => {
         const reviewImage = makeElement('div', ['card-img', 'border', 'rounded-0']);
         const src = review.image;
         reviewImage.style.height = "12rem";
-        console.log(src);
+        // console.log(src);
         if (src) {
             reviewImage.style.backgroundImage = `url(${src})`;
             reviewImage.style.backgroundSize = 'cover';
