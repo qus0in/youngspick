@@ -73,7 +73,7 @@ textarea{
     z-index: 999;
 }
 /* 지도 설정 */
-#expandStoreMap {
+#storeMap {
     height: 360px;
 }
 /* Fade-in */

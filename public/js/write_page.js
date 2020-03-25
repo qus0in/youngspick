@@ -9,8 +9,8 @@ const kwdSearch = (searchText, curr) => {
             status === kakao.maps.services.Status.OK
                 ? resolve([result, pagination]) : reject(status);
         },
-        // option : FD6은 식당, 한 페이지의 5항목씩, page는 이후에 검색을 위해
-        { category_group_code: 'FD6', size: 5, page: curr ? curr : 1 });
+            // option : FD6은 식당, 한 페이지의 5항목씩, page는 이후에 검색을 위해
+            { category_group_code: 'FD6', size: 5, page: curr ? curr : 1 });
     })
 }
 
@@ -92,20 +92,12 @@ const searchStore = (curr) => {
     drawForm();
 }
 
-// 주소와 가게 이름을 통해 가게 관련 정보 불러오기 (프로미스)
-const loadStore = (address, name, page) => {
-    if (!page) page = 1;
-    // 이름으로 find해서 값 찾기
-    const findByName = (result) => {
-        // result[0] : 검색 결과, result[1] : 페이징 정보
-        // 검색 결과 페이지보다 넘어갈 시 error throw (재귀해결)
-        if (result[1].last < page) throw new Error('페이지 범위 초과')
-        // 찾은 결과 중에 찾으려는 가게 이름과 장소 이름이 일치하는 지를 판정
-        const target = result[0].find(element => element.place_name == name);
-        // 값이 나옴 => return, 값이 안 나옴(undefined -> false로 취급) => page 정보를 바꿔서 재귀적으로 다음 서치
-        return target ? target : loadStore(address, name, ++page);
+// 가게 이름과 주소가 value를 가지고 있는지 검증
+const validate = () => {
+    if(document.querySelector('#inputStoreName').value && document.querySelector('#inputStoreAddress').value) {
+        return true;
+    } else {
+        alert('가게 이름과 가게 주소를 입력해주세요!')
+        return false;
     }
-    return this.kwdSearch(address, page) // address로 서치
-        .then(findByName) // 이름으로 찾기
-        .catch(console.error);
 }

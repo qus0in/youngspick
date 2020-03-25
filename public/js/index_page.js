@@ -27,15 +27,14 @@ const drawReviewList = async reviewPromise => {
         // 리뷰 이미지
         const reviewImage = makeElement('div', ['card-img', 'border', 'rounded-0']);
         const src = review.image;
-        const imgur = 'https://imgur.com/';
         reviewImage.style.height = "12rem";
-        if (src == '' || src == 'test') {
+        console.log(src);
+        if (src) {
+            reviewImage.style.backgroundImage = `url(${src})`;
+            reviewImage.style.backgroundSize = 'cover';
+        } else {
             reviewImage.style.backgroundImage = 'url(/img/meal.png)';
             reviewImage.style.backgroundSize = 'contain';
-        } else {
-            // 차후 수정 예정 (api를 붙여서)
-            reviewImage.style.backgroundImage = `url(${src.includes(imgur) ? src.replace(imgur, 'https://i.imgur.com/').concat('.png') : src}), url(${src.includes(imgur) ? src.replace(imgur, 'https://i.imgur.com/').concat('.jpg') : src})`;
-            reviewImage.style.backgroundSize = 'cover';
         }
         reviewImage.style.backgroundRepeat = 'no-repeat';
         reviewImage.style.backgroundPosition = 'center center';
