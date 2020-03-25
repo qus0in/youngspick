@@ -33,8 +33,9 @@ router.post('/write', upload.single('image'), async function (req, res, next) {
         console.log(reviewRaw);
         // raw로 받아온 다음에 imgur API를 통해서 업로드하고 주소를 바꿔넣어줌
         // mutter를 통해 생성한 upload 함수로 req.file을 만들고, req.file의 buffer를 base64로 인코딩 후 해당 파일로 imgur api로 전달 => response로 json을 받아오는데 그중 data.link에서 업로드된 주소를 받아옴
-        if (reviewRaw.image) {
+        if (req.file) {
             // image 값이 있을 때만...
+            console.log("<이미지 존재>")
             reviewRaw.image = await imgur.uploadBase64(req.file.buffer.toString('base64')).then((json) => json.data.link);
         } 
         const review = await Review.create(reviewRaw);
@@ -63,8 +64,9 @@ router.post('/edit', upload.single('image'), async function (req, res, next) {
     try {
         const reviewRaw = req.body;
         console.log(reviewRaw);
-        if (reviewRaw.image) {
+        if (req.file) {
             // image 값이 있을 때만...
+            console.log("<이미지 존재>")
             reviewRaw.image = await imgur.uploadBase64(req.file.buffer.toString('base64')).then((json) => json.data.link);
         } 
         const id = String(req.headers.referer).match(/review\/(\d+)/)[1]
@@ -117,7 +119,7 @@ router.put('/id/:id', async function (req, res, next) {
 // 에러 처리
 router.use(function (err, req, res, next) {
     console.error(err.stack);
-    res.status(500).send(err.message);
+    res.status(500).render("pages/error.ejs", {title: "Young's Pick - 에러 발생", page: "error", message: err.message});
 });
 
 // 라우터 내보내기
