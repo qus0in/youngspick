@@ -1,0 +1,95 @@
+<header class="card-header">
+    <h5 class="font-weight-bold">
+        <% if(page == "write") {%><%= "가게 추가" %>
+        <%}else if(page == "detail") {%><%="가게 수정"%><%}%>
+    </h5>
+</header>
+<section class="card-body">
+    <div class="form-group m-3">
+        <form id="searchStoreForm" onsubmit="searchStore(); return false;">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <label class="input-group-text text-dark" for="inputStoreKwd">
+                        가게 검색
+                    </label>
+                </div>
+                <input id="inputStoreKwd" class="form-control" type="text" required>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-primary">검색</button>
+                </div>
+            </div>
+        </form>
+        <select id="inputStoreSelect" class="mt-2 form-control" size="5">
+            <option>가게명으로 검색</option>
+        </select>
+        <div class="mt-2 d-flex justify-content-end">
+            <button class="btn btn-secondary btn-sm" id="firstPage" type="button" disabled>&lt;&lt;</button>
+            <button class="ml-1 btn btn-secondary btn-sm" id="prevPage" type="button" disabled>&lt;</button>
+            <button class="ml-1 btn btn-secondary btn-sm" id="nextPage" type="button" disabled>&gt;</button>
+            <button class="ml-1 btn btn-secondary btn-sm" id="lastPage" type="button" disabled>&gt;&gt;</button>
+            <button class="ml-1 btn btn-secondary btn-sm" id="decision" type="button" disabled>선택</button>
+        </div>
+    </div>
+    <hr>
+    <form id="addStoreForm" method="POST" onsubmit="return validate()" enctype="multipart/form-data" action="/<% if(page == "write") {%><%='write'%><% } else if(page == "detail") {%><%='edit'%><%}%>"> 
+        <div class="form-group m-3">
+            <label for="inputStoreName">
+                가게 이름
+            </label>
+            <input name="name" type="text" class="form-control" id="inputStoreName" placeholder="키워드를 검색해주세요" readonly
+                <% if(page == "detail") {%> value="<%= review.name %>" <% } %>>
+        </div>
+        <div class="form-group m-3">
+            <label for="inputStoreAddress">
+                가게 주소
+            </label>
+            <input name="address" type="text" class="form-control" id="inputStoreAddress" placeholder="키워드를 검색해주세요"
+                readonly <% if(page == "detail") { %> value="<%= review.address %>" <% } %>>
+        </div>
+        <div class="form-group m-3">
+            <label for="inputStoreRate">
+                가게 평점
+            </label>
+            <div id="inputStoreStar" class="storeStar">
+                <div>
+                    <i class="fa"></i>
+                    <i class="fa"></i>
+                    <i class="fa"></i>
+                    <i class="fa"></i>
+                    <i class="fa"></i>
+                </div>
+                <div>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                </div>
+                <div>
+                    <input name="rate" type="range" class="form-control" id="inputStoreRate" min="0" max="5" step="0.5"
+                        value="<% if(page == "detail") {%><%= review.rate %><%}else{%><%="0"%><%}%>" onchange="drawStar(this.value);">
+                </div>
+            </div>
+        </div>
+        <div class="form-group m-3">
+            <label for="inputStoreImage">
+                가게 이미지
+            </label>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" name="image" accept=".png, .jpg, .gif">
+                <label class="custom-file-label" for="customFile">이미지 파일 선택</label>
+            </div>
+        </div>
+        <div class="form-group m-3">
+            <label for="inputStoreReview">
+                가게 리뷰
+            </label>
+            <textarea name="comments" class="form-control" id="inputStoreReview" rows="5"
+                placeholder="가게 리뷰를 입력해주세요 (20자 이상 200자 이하)" minlength="20" maxlength="200" required><% if(page == "detail"){%><%=review.comments%><% } %></textarea>
+        </div>
+        <footer class=" d-flex justify-content-end card-footer">
+            <button type="reset" class="btn btn-outline-secondary mx-1">초기화</button>
+            <button type="submit" class="btn btn-outline-primary mx-1">제출</button>
+        </footer>
+    </form>
+</section>

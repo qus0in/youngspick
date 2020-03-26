@@ -1,0 +1,33 @@
+{
+  "name": "youngspick",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "ejs": "^2.7.4",
+    "express": "^4.17.1",
+    "imgur": "^0.3.1",
+    "mongoose": "5.9.3",
+    "mongoose-auto-increment": "^5.0.1",
+    "mongoose-paginate": "^5.0.3",
+    "multer": "^1.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qus0in/youngspick.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qus0in/youngspick/issues"
+  },
+  "homepage": "https://github.com/qus0in/youngspick#readme"
+}

@@ -1,0 +1,19 @@
+<!-- Axios -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- Optional JavaScript -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!-- 카카오 지도 API -->
+<script type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ce2858ca466fef497f5d5188da7108eb&libraries=services"></script>
+<!-- Custom -->
+<script src="/js/common_page.js"></script>
+<% if (page=="main") {%>
+    <script src="/js/index_page.js"></script>
+<% } else if (page=="detail") {%>
+    <script src="/js/write_page.js"></script>
+    <script src="/js/detail_page.js"></script>
+<% } else if (page=="write") {%>
+    <script src="/js/write_page.js"></script>
+<% } %>

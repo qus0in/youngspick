@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <%- include('../partials/header', {title: title}); %>
+</head>
+
+<body>
+    <%- include('../partials/nav'); %>
+    <section class="container no-gutters mx-auto">
+        <div class="card col-md-10 col-lg-8 col-xl-6 mx-auto mb-3">
+            <header class="card-header">
+                <h1 class="display-4 font-weight-bold" id="storeName"><%= review.name %></h1>
+                <p id="storeAddress" class="lead"><%= review.address %></p>
+                <%# 카카오 API를 통해 비동기 작업 %>
+                <small id="storeCategory" class="font-italic">카테고리</small>
+                <div class="text-right text-muted">
+                    <small>
+                        작성시간 : <span id="storeCreated"
+                            class="font-italic"><%= review.createdAt.toLocaleString() %></span>
+                    </small>
+                    <% if(review.createdAt.toString() != review.updatedAt.toString()) { %>
+                    <br>
+                    <small>
+                        수정시간 : <span id="storeUpdated"
+                            class="font-italic"><%= review.updatedAt.toLocaleString() %></span>
+                    </small>
+                    <% } %>
+                    </p>
+                </div>
+            </header>
+            <section class="card-body">
+                <figure class="d-flex justify-content-center p-3">
+                    <img id="storeImage" class="img-fluid border rounded" alt="리뷰 이미지" src=
+                        <% if(review.image) {%> <%=review.image%>
+                        <% } else { %><%="/img/meal.png"%><%}%>>
+                </figure>
+                <%# 카카오 API를 통해 비동기 작업 %>
+                <h4>지도</h4>
+                <figure class="p-3">
+                    <div id="storeMap" class="mx-auto border rounded">API</div>
+                </figure>
+                <h4>별점</h4>
+                <figure class="p-3">
+                    <div class="storeStar" id="storeStar">☆☆☆☆☆</div>
+                </figure>
+                <h4>리뷰</h4>
+                <article class="card-text p-3">
+                    <%= review.comments %>
+                </article>
+            </section>
+            <div class="d-flex justify-content-center px-3 py-1">
+                <button id="watchLarge" class="mr-2 btn btn-outline-primary">큰 지도 보기</button>
+                <button id="watchDetail" class="mr-2 btn btn-outline-primary">상세 페이지 보기</button>
+                <button id="findWay" class="mr-2 btn btn-outline-primary">길찾기</button>
+            </div>
+            <div class="d-flex justify-content-center px-3 pt-1 pb-3">
+                <button class="mr-2 btn btn-outline-secondary" data-toggle="modal" data-target="#editModal">수정하기</button>
+                <button class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal">삭제하기</button>
+            </div>
+        </div>
+    </section>
+    <div id="editModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body card">
+                    <%- include('write_form.ejs') %> 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="deleteModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>정말 <b>삭제</b>하시겠습니까?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    <form method="POST" action="/delete">
+                        <button type="submit" class="btn btn-danger">삭제하기</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('../partials/scripts'); %>
+    <script>
+        drawStar(<%= review.rate %>, document.querySelector('#storeStar'));
+        drawStar(<%= review.rate %>);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <%- include('../partials/header', {title: title}); %>
+</head>
+
+<body>
+    <%- include('../partials/nav'); %>
+    <section class="container no-gutters mx-auto">
+        <div class="card col-md-10 col-lg-8 col-xl-6 mx-auto mb-3">
+            <%- include('write_form.ejs') %> 
+        </div>
+    </section>
+    <%- include('../partials/scripts'); %>
+</body>
+
+</html>
