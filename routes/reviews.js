@@ -21,6 +21,18 @@ router.use(function (req, res, next) {
 // 기본 접속
 router.get('/', (req, res) => res.render('pages/index', { page: "main", title: "Young's Pick" }))
 
+// 리뷰 조회
+router.get('/review/:id', async function (req, res, next) {
+    // findById : id로 검색할 수 있게 해주는 메소드
+    try {
+        const review = await Review.findById(req.params.id);
+        console.log(review);
+        res.render('pages/detail', { page: "detail", title: `Young's Pick - ${review.name}`, review: review })
+    } catch (err) {
+        next(err)
+    }
+});
+
 // 리뷰 작성 (페이지)
 router.get('/write', async function (req, res, next) {
     res.render('pages/write', { page: "write", title: "Young's Pick - 작성하기" })
@@ -59,7 +71,8 @@ router.post('/delete', async (req, res, next) => {
         next(err)
     }
 })
-// 리뷰 수정 (DB 연동)
+
+// 리뷰 수정
 router.post('/edit', upload.single('image'), async function (req, res, next) {
     try {
         const reviewRaw = req.body;
@@ -79,6 +92,7 @@ router.post('/edit', upload.single('image'), async function (req, res, next) {
 });
 
 // 비동기 (async)
+
 // 페이지별 조회
 router.get('/page/:page', async function (req, res, next) {
     try {
@@ -86,31 +100,6 @@ router.get('/page/:page', async function (req, res, next) {
         const reviewPage = await Review.paginate({}, { limit: 6, page: Number(req.params.page), sort: {_id : -1} });
         console.log(`page ${reviewPage.page} / ${reviewPage.pages}`);
         res.json(reviewPage);
-    } catch (err) {
-        next(err)
-    }
-});
-
-// 게시글 개별 조회
-router.get('/review/:id', async function (req, res, next) {
-    // findById : id로 검색할 수 있게 해주는 메소드
-    try {
-        const review = await Review.findById(req.params.id);
-        console.log(review);
-        res.render('pages/detail', { page: "detail", title: `Young's Pick - ${review.name}`, review: review })
-    } catch (err) {
-        next(err)
-    }
-});
-
-// 게시글 업데이트
-router.put('/id/:id', async function (req, res, next) {
-    // findByIdAndUpdate : id로 검색 후 수정
-    try {
-        const review = await Review.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        const msg = `수정 성공 : ${JSON.stringify(review)}`
-        console.log(msg);
-        res.json(msg);
     } catch (err) {
         next(err)
     }
