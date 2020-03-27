@@ -17,13 +17,21 @@
                 <div class="text-right text-muted">
                     <small>
                         작성시간 : <span id="storeCreated"
-                            class="font-italic"><%= review.createdAt.toLocaleString() %></span>
+                            class="font-italic"></span>
+                        <script>
+                            document.querySelector("#storeCreated").innerHTML =
+                                new Date("<%= review.createdAt.toLocaleString() %>").toLocaleString();
+                        </script>
                     </small>
                     <% if(review.createdAt.toString() != review.updatedAt.toString()) { %>
                     <br>
                     <small>
                         수정시간 : <span id="storeUpdated"
-                            class="font-italic"><%= review.updatedAt.toLocaleString() %></span>
+                            class="font-italic"></span>
+                        <script>
+                            document.querySelector("#storeUpdated").innerHTML =
+                                new Date("<%= review.updatedAt.toLocaleString() %>").toLocaleString();
+                        </script>    
                     </small>
                     <% } %>
                     </p>
