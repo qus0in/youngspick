@@ -101,3 +101,10 @@ const validate = () => {
         return false;
     }
 }
+
+// textarea 글짜 세기용
+const wordCount = (textArea='#inputStoreReview', counter='#wordCounter') => {
+    document.querySelector(counter).innerHTML = document.querySelector(textArea).value.length;
+}
+
+wordCount();
