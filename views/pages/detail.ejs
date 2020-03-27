@@ -20,7 +20,7 @@
                             class="font-italic"></span>
                         <script>
                             document.querySelector("#storeCreated").innerHTML =
-                                new Date("<%= review.createdAt.toLocaleString() %>").toLocaleString();
+                                new Date("<%= review.createdAt.toISOString() %>").toLocaleString();
                         </script>
                     </small>
                     <% if(review.createdAt.toString() != review.updatedAt.toString()) { %>
@@ -30,7 +30,7 @@
                             class="font-italic"></span>
                         <script>
                             document.querySelector("#storeUpdated").innerHTML =
-                                new Date("<%= review.updatedAt.toLocaleString() %>").toLocaleString();
+                                new Date("<%= review.updatedAt.toISOString() %>").toLocaleString();
                         </script>    
                     </small>
                     <% } %>
