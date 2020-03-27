@@ -82,10 +82,13 @@
         </div>
         <div class="form-group m-3">
             <label for="inputStoreReview">
-                가게 리뷰
+                가게 리뷰 (20자 이상 200자 이하)
             </label>
-            <textarea name="comments" class="form-control" id="inputStoreReview" rows="5"
+        <textarea name="comments" class="form-control" id="inputStoreReview" rows="5" oninput="wordCount()"
                 placeholder="가게 리뷰를 입력해주세요 (20자 이상 200자 이하)" minlength="20" maxlength="200" required><% if(page == "detail"){%><%=review.comments%><% } %></textarea>
+        <div class="text-right">
+            <small>현재 <strong id="wordCounter"></strong>자 / 200자</small>
+        </div>
         </div>
         <footer class=" d-flex justify-content-end card-footer">
             <button type="reset" class="btn btn-outline-secondary mx-1">초기화</button>
